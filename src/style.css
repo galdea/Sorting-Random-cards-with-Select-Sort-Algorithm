@@ -1,1 +1,11 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
+
+body {
+  background-color: green;
+  font-family: "Times New Roman", Times, serif;
+}
+.card {
+  float: left;
+  width: 200px;
+  margin: 0 10px;
+}

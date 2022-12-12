@@ -11,18 +11,128 @@
       crossorigin="anonymous"
     />
     <link rel="shortcut icon" href="./4geeks.ico" />
+    <script>
+      function generateCardsButton() {
+        // Get the selected number of cards from the dropdown
+        const cardNumber = document.getElementById("cardnumber").value;
+
+        // Define the array of suits outside of the for loop
+        const suits = ["♦", "♥", "♣", "♠"];
+
+        // Clear any existing cards
+        document.getElementById("cards").innerHTML = "";
+
+        // Generate the specified number of cards
+        for (let i = 0; i < cardNumber; i++) {
+          // Generate a random suit for the card
+          const suit = suits[Math.floor(Math.random() * suits.length)];
+
+          // Set the background color of the suit to red if it's "♦" or "♥"
+          if (suit == "♦" || suit == "♥") {
+            setTimeout(function() {
+              document.getElementsByClassName("topcardssymbol")[i].style.color =
+                "red";
+              document.getElementsByClassName("bottomcardssymbol")[
+                i
+              ].style.color = "red";
+            }, 0);
+          }
+
+          // Generate a random number for the card
+          const numbers = [
+            "A",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "J",
+            "Q",
+            "K"
+          ];
+          const number = numbers[Math.floor(Math.random() * numbers.length)];
+
+          // Create the card HTML as a string
+          const cardHTML = `
+  <div class="card-header d-flex justify-content-start pb-1" id="cardsymbol" style="background-color: white; border: none; font-size: 25px;">
+    <div class="topcardssymbol">${suit}</div>
+  </div>
+  <div class="d-flex justify-content-center" id="myNumber" style="font-size: 50px;">${number}</div>
+  <div class="card-footer d-flex justify-content-start pt-1" style="background-color: white; border: none; font-size: 25px; transform: rotate(-180deg);">
+    <div class="bottomcardssymbol">${suit}</div>
+  </div>
+`;
+
+          // Create a new card div
+          const card = document.createElement("div");
+          card.classList.add("card");
+          card.innerHTML = cardHTML;
+
+          // Append the card to the cards container
+          document.getElementById("cards").appendChild(card);
+        }
+      }
+    </script>
   </head>
   <body>
-    <div class="container-fluid text-center">
-      <h1 class="mt-5">Hello Rigo!</h1>
-      <img src="./rigo-baby.jpg" />
-      <p class="alert alert-warning mt-4">
-        If this text is <b>not</b> centered and <b>yellow</b>, you probably have
-        an error
-      </p>
-      <div class="fixed-bottom p-4">
-        Made with ❤️ by
-        <a href="https://www.4geeksacademy.com">4Geeks Academy</a>
+    <form onsubmit="return false;">
+      <div class="col-3">
+        <select class="form-select" id="cardnumber">
+          <option value="howmany">How many cards would you like?</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+        </select>
+      </div>
+
+      <button id="generate-cards" onclick="generateCardsButton();">
+        Generate Cards
+      </button>
+    </form>
+
+    <div class="row m-5 cardplayer" id="cards">
+      <!-- First Card -->
+
+      <div
+        class="col-1 card px-1"
+        style="border-radius: 10px; max-width: 10%; display: none;"
+        id="pokercard"
+      >
+        <!-- Header -->
+
+        <div
+          class="card-header d-flex justify-content-start pb-1"
+          id="cardsymbol"
+          style="background-color: white; border: none; font-size: 25px;"
+        >
+          <div class="topcardsymbol"></div>
+        </div>
+
+        <!-- Number -->
+
+        <div
+          class="d-flex justify-content-center"
+          id="myNumber"
+          style="font-size: 50px;"
+        ></div>
+
+        <!-- Footer -->
+
+        <div
+          class="card-footer d-flex justify-content-start pt-1"
+          style="background-color: white; border: none; font-size: 25px; transform: rotate(-180deg);"
+        >
+          <div class="bottomcardsymbol"></div>
+        </div>
       </div>
     </div>
   </body>
