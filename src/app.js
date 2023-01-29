@@ -5,62 +5,142 @@ import "./style.css";
 import "./assets/img/rigo-baby.jpg";
 import "./assets/img/4geeks.ico";
 
-function generateCardsButton() {
-  // Get the selected number of cards from the dropdown
-  const cardNumber = document.getElementById("cardnumber").value;
+let drawButton = document.getElementById("draw");
+let sortButton = document.getElementById("sort");
+let container = document.getElementById("container");
+let cards = [];
 
-  // Define the array of suits outside of the for loop
-  const suits = ["♦", "♥", "♣", "♠"];
+function randomNumber() {
+  let num = Math.floor(Math.random() * 13) + 1;
+  return num;
+}
 
-  // Clear any existing cards
-  document.getElementById("cards").innerHTML = "";
-
-  // Generate the specified number of cards
-  for (let i = 0; i < cardNumber; i++) {
-    // Generate a random suit for the card
-    const suit = suits[Math.floor(Math.random() * suits.length)];
-
-    if (suit == "♦" || suit == "♥") {
-      document.getElementsByClassName("topcardssymbol")[i].style.color = "red";
-      document.getElementsByClassName("bottomcardssymbol")[i].style.color =
-        "red";
+function cardValue(num) {
+  if (num > 1 && num < 11) {
+    return num.toString();
+  } else {
+    switch (num) {
+      case 1:
+        return "A";
+      case 11:
+        return "J";
+      case 12:
+        return "Q";
+      case 13:
+        return "K";
     }
-
-    // Generate a random number for the card
-    const numbers = [
-      "A",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "10",
-      "J",
-      "Q",
-      "K"
-    ];
-    const number = numbers[Math.floor(Math.random() * numbers.length)];
-
-    // Create the card HTML as a string
-    const cardHTML = `
-      <div class="card-header d-flex justify-content-start pb-1" id="cardsymbol">
-        <div class="topcardsymbol">${suit}</div>
-      </div>
-      <div class="d-flex justify-content-center" id="myNumber">${number}</div>
-      <div class="card-footer d-flex justify-content-start pt-1" style="transform: rotate(-180deg);">
-        <div class="bottomcardsymbol">${suit}</div>
-      </div>
-    `;
-
-    // Create a new card div
-    const card = document.createElement("div");
-    card.classList.add("card");
-    card.innerHTML = cardHTML;
-
-    // Append the card to the cards container
-    document.getElementById("cards").appendChild(card);
   }
 }
+
+function randomSuit() {
+  let suit = Math.floor(Math.random() * 4) + 1;
+  switch (suit) {
+    case 1:
+      return "♦";
+    case 2:
+      return "♥";
+    case 3:
+      return "♠";
+    case 4:
+      return "♣";
+  }
+}
+
+function printCards(num, suit, obj) {
+  num = cardValue(num);
+
+  let new_col = document.createElement("div");
+  new_col.className = "col-sm-1";
+
+  let card = document.createElement("div");
+  card.className = "card";
+
+  let card_body = document.createElement("div");
+  card_body.className = "card-body p-2";
+
+  let suit_top = document.createElement("h5");
+  suit_top.className = "card-title text-start";
+  suit_top.innerHTML = suit;
+
+  let num_card = document.createElement("h5");
+  num_card.className = "card-title  text-center";
+  num_card.innerHTML = num;
+
+  let suit_bottom = document.createElement("h5");
+  suit_bottom.className = "card-title  text-end upsidedown";
+  suit_bottom.innerHTML = suit;
+
+  if (suit === "♥" || suit === "♦") {
+    suit_top.style["color"] = "red";
+    suit_bottom.style["color"] = "red";
+  }
+
+  card_body.appendChild(suit_top);
+  card_body.appendChild(num_card);
+  card_body.appendChild(suit_bottom);
+  card.appendChild(card_body);
+  new_col.appendChild(card);
+
+  obj.appendChild(new_col);
+}
+
+function removeSorts() {
+  if (document.getElementsByClassName("new_row").length != 0) {
+    var new_rows = document.getElementsByClassName("new_row");
+    for (
+      let i = document.getElementsByClassName("new_row").length - 1;
+      i >= 0;
+      i--
+    ) {
+      container.removeChild(new_rows[i]);
+    }
+  }
+}
+
+drawButton.onclick = function draw() {
+  let firstRow = document.getElementById("first-row");
+  firstRow.innerHTML = "";
+  cards = [];
+
+  removeSorts();
+
+  for (let i = 0; i < document.getElementById("amount").value; i++) {
+    let cardObj = { value: randomNumber(), suit: randomSuit() };
+    cards.push(cardObj);
+  }
+  cards.forEach(element => {
+    printCards(element.value, element.suit, firstRow);
+  });
+};
+
+sortButton.onclick = function sort() {
+  removeSorts();
+
+  let subtitle_row = document.createElement("div");
+  subtitle_row.className = "row m-2 new_row";
+
+  let subtitle = document.createElement("h4");
+  subtitle.className = "d-inline text-light p-0";
+  subtitle.innerHTML = "Sorted Cards: ";
+
+  subtitle_row.appendChild(subtitle);
+  container.appendChild(subtitle_row);
+
+  for (let wall = cards.length - 1; wall > 0; wall--) {
+    for (let index = 0; index < wall; index++) {
+      console.log(cards[index].value);
+      if (parseInt(cards[index].value) > parseInt(cards[index + 1].value)) {
+        console.log(cards[index].value + " " + cards[index + 1].value);
+        let aux = cards[index].value;
+        cards[index].value = cards[index + 1].value;
+        cards[index + 1].value = aux;
+      }
+    }
+    let new_row = document.createElement("div");
+    new_row.className = "row m-2 new-row";
+    container.appendChild(new_row);
+    for (let i = 0; i < cards.length; i++) {
+      printCards(cards[i].value, cards[i].suit, new_row);
+    }
+  }
+};

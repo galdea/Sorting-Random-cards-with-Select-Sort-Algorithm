@@ -1,194 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello Rigo with Vanilla.js</title>
     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-      integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
       crossorigin="anonymous"
     />
-    <link rel="shortcut icon" href="./4geeks.ico" />
-    <script>
-      // Generate Number of Cards function
-      function generateCardsButton() {
-        const cardNumber = document.getElementById("cardnumber").value;
-
-        document.getElementById("cards").innerHTML = "";
-
-        const suits = ["♦", "♥", "♣", "♠"];
-
-        for (let i = 0; i < cardNumber; i++) {
-          const suit = suits[Math.floor(Math.random() * suits.length)];
-
-          if (suit == "♦" || suit == "♥") {
-            setTimeout(function() {
-              document.getElementsByClassName("topcardssymbol")[i].style.color =
-                "red";
-              document.getElementsByClassName("bottomcardssymbol")[
-                i
-              ].style.color = "red";
-            }, 0);
-          }
-
-          const numbers = [
-            "A",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10",
-            "J",
-            "Q",
-            "K"
-          ];
-          const number = numbers[Math.floor(Math.random() * numbers.length)];
-
-          // String of cards created
-          const cardHTML = `
-                            <div class="card-header d-flex justify-content-start pb-1" id="cardsymbol" style="background-color: white; border: none; font-size: 25px;">
-                              <div class="topcardssymbol">${suit}</div>
-                            </div>
-                            <div class="d-flex justify-content-center" id="myNumber" style="font-size: 50px;">${number}</div>
-                            <div class="card-footer d-flex justify-content-start pt-1" style="background-color: white; border: none; font-size: 25px; transform: rotate(-180deg);">
-                              <div class="bottomcardssymbol">${suit}</div>
-                            </div>
-                          `;
-
-          const card = document.createElement("div");
-          card.classList.add("card");
-          card.innerHTML = cardHTML;
-          document.getElementById("cards").appendChild(card);
-        }
-      }
-      // Sorting algorithm
-      let numbers = [];
-      function generateSortingAlgorithm() {
-        let cards = document.querySelectorAll(".card");
-
-        for (let card of cards) {
-          let myNumber = card.querySelector("#myNumber");
-          if (myNumber) {
-            let number = myNumber.innerHTML;
-            if (number === "A") {
-              number = "1";
-            }
-            if (number === "J") {
-              number = "11";
-            } else if (number === "Q") {
-              number = "12";
-            } else if (number === "K") {
-              number = "13";
-            }
-            numbers.push(parseInt(number));
-          }
-        }
-        console.log("Initial array: " + numbers);
-
-        //bubblesort algorithm
-        let swapped = true;
-        while (swapped) {
-          swapped = false;
-          for (let i = 0; i < numbers.length - 1; i++) {
-            if (numbers[i] > numbers[i + 1]) {
-              let temp = numbers[i];
-              numbers[i] = numbers[i + 1];
-              numbers[i + 1] = temp;
-              swapped = true;
-
-              console.log("Current step: " + numbers);
-            }
-            document.getElementById("bubblesort").innerHTML +=
-              "Current step: " + numbers;
-          }
-        }
-
-        console.log("Final result: " + numbers);
-
-        document.getElementById("bubblesort").innerHTML +=
-          "Final result: " + numbers;
-      }
-    </script>
+    <link rel="stylesheet" href="./style.css" />
+    <title>Bubble Sorting Method</title>
   </head>
+
   <body>
-    <form onsubmit="return false;">
-      <div class="row m-5">
-        <div class="col-3">
-          <select class="form-select" id="cardnumber">
-            <option value="howmany">How many cards would you like?</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-        </div>
-        <div class="col-3">
-          <button
-            class="btn btn-light"
-            id="generate-cards"
-            onclick="generateCardsButton();"
-          >
-            Generate Cards
-          </button>
-        </div>
-
-        <div class="col-3">
-          <button
-            class="btn btn-light"
-            id="sort-cards"
-            onclick="generateSortingAlgorithm();"
-          >
-            Sort by Algorithms
-          </button>
+    <navbar>
+      <input
+        class="amount"
+        type="number"
+        name=""
+        id="amount"
+        min="2"
+        max="12"
+      />
+      <a class="btn" type="button" id="draw">draw</a>
+      <a class="btn" type="button" id="sort">sort</a>
+    </navbar>
+    <div id="container" class="container h-100 ">
+      <div class="row pt-2 align-items-center">
+        <div class="col-12 p-1">
+          <h4>Original:</h4>
         </div>
       </div>
-    </form>
-
-    <div class="row m-5 cardplayer" id="cards">
-      <!-- First Card -->
-
-      <div
-        class="col-1 card px-1"
-        style="border-radius: 10px; max-width: 10%; display: none;"
-        id="pokercard"
-      >
-        <!-- Header -->
-
-        <div
-          class="card-header d-flex justify-content-start pb-1"
-          id="cardsymbol"
-          style="background-color: white; border: none; font-size: 25px;"
-        >
-          <div class="topcardsymbol"></div>
-        </div>
-
-        <!-- Number -->
-
-        <div
-          class="d-flex justify-content-center"
-          id="myNumber"
-          style="font-size: 50px;"
-        ></div>
-
-        <!-- Footer -->
-
-        <div
-          class="card-footer d-flex justify-content-start pt-1"
-          style="background-color: white; border: none; font-size: 25px; transform: rotate(-180deg);"
-        >
-          <div class="bottomcardsymbol"></div>
-        </div>
-      </div>
+      <div id="first-row" class="row"></div>
     </div>
-    <div class="row m-5" id="bubblesort">
-      <div>array with sorted cards</div>
-    </div>
+
+    <script src="./js/index.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
