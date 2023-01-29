@@ -136,6 +136,7 @@ sortButton.onclick = function sort() {
         cards[index + 1].value = aux;
       }
     }
+
     let new_row = document.createElement("div");
     new_row.className = "row m-2 new-row";
     container.appendChild(new_row);
