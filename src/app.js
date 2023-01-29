@@ -112,7 +112,6 @@ drawButton.onclick = function draw() {
     printCards(element.value, element.suit, firstRow);
   });
 };
-
 sortButton.onclick = function sort() {
   removeSorts();
 
@@ -126,17 +125,18 @@ sortButton.onclick = function sort() {
   subtitle_row.appendChild(subtitle);
   container.appendChild(subtitle_row);
 
-  for (let wall = cards.length - 1; wall > 0; wall--) {
-    for (let index = 0; index < wall; index++) {
-      console.log(cards[index].value);
-      if (parseInt(cards[index].value) > parseInt(cards[index + 1].value)) {
-        console.log(cards[index].value + " " + cards[index + 1].value);
-        let aux = cards[index].value;
-        cards[index].value = cards[index + 1].value;
-        cards[index + 1].value = aux;
+  for (let wall = 0; wall < cards.length - 1; wall++) {
+    let minIndex = wall;
+    for (let index = wall + 1; index < cards.length; index++) {
+      if (parseInt(cards[index].value) < parseInt(cards[minIndex].value)) {
+        minIndex = index;
       }
     }
-
+    if (wall !== minIndex) {
+      let aux = cards[wall].value;
+      cards[wall].value = cards[minIndex].value;
+      cards[minIndex].value = aux;
+    }
     let new_row = document.createElement("div");
     new_row.className = "row m-2 new-row";
     container.appendChild(new_row);
